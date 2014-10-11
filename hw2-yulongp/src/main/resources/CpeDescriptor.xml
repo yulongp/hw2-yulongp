@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cpeDescription>
+  <collectionReader>
+    <collectionIterator>
+      <descriptor>
+        <import location="descriptors/collectionReaderDescriptor.xml"/>
+      </descriptor>
+    </collectionIterator>
+  </collectionReader>
+  <casProcessors dropCasOnException="true" casPoolSize="1" 
+      processingUnitThreadCount="1">
+    <casProcessor deployment="integrated" 
+      name="aaeAnnotator">
+      <descriptor>
+        <import location="descriptors/hw2-yulongp-aae.xml"/>
+      </descriptor>
+      <deploymentParameters/>
+      <filter/>
+      <errorHandling>
+        <errorRateThreshold action="terminate" value="100/1000"/>
+                <maxConsecutiveRestarts action="terminate" value="30"/>
+                <timeout max="100000"/>
+      </errorHandling>
+      <checkpoint batch="1"/>
+    </casProcessor>
+    <casProcessor deployment="integrated" 
+      name="casConsumerDescriptor">
+      <descriptor>
+        <import location="descriptors/casConsumerDescriptor.xml"/>
+      </descriptor>
+      <deploymentParameters/>
+      <filter/>
+      <errorHandling>
+        <errorRateThreshold action="terminate" value="100/1000"/>
+                <maxConsecutiveRestarts action="terminate" value="30"/>
+                <timeout max="100000"/>
+      </errorHandling>
+      <checkpoint batch="1"/>
+    </casProcessor>
+  </casProcessors>
+  <cpeConfig>
+    <numToProcess>-1</numToProcess>
+    <deployAs>immediate</deployAs>
+    <checkpoint batch="0" time="300000ms" />
+    <timerImpl/>
+  </cpeConfig>
+</cpeDescription>

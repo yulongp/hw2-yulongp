@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<analysisEngineDescription xmlns="http://uima.apache.org/resourceSpecifier">
+	<frameworkImplementation>org.apache.uima.java</frameworkImplementation>
+	<primitive>true</primitive>
+	<annotatorImplementationName>edu.cmu.deiis.utils.LingPipeAnnotator</annotatorImplementationName>
+	<analysisEngineMetaData>
+		<name>LingPipeAnnotatorDescriptor</name>
+		<description/>
+		<version>1.0</version>
+		<vendor/>
+		<configurationParameters searchStrategy="language_fallback"/>
+		<configurationParameterSettings/>
+		<typeSystemDescription>
+			<imports>
+				<import location="deiis_types.xml"/>
+			</imports>
+		</typeSystemDescription>
+		<typePriorities/>
+		<fsIndexCollection/>
+		<capabilities>
+			<capability>
+				<inputs>
+					<type allAnnotatorFeatures="true">Sentence</type>
+				</inputs>
+				<outputs>
+					<type allAnnotatorFeatures="true">edu.cmu.deiis.sentence.GeneEntitybyLingpipe</type>
+        </outputs>
+				<languagesSupported/>
+			</capability>
+		</capabilities>
+		<operationalProperties>
+			<modifiesCas>true</modifiesCas>
+			<multipleDeploymentAllowed>true</multipleDeploymentAllowed>
+			<outputsNewCASes>false</outputsNewCASes>
+		</operationalProperties>
+	</analysisEngineMetaData>
+	<externalResourceDependencies>
+    <externalResourceDependency>
+      <key>LingPipeNERModel</key>
+      <description>Lingpipe NER model trained on external data set.</description>
+      <optional>false</optional>
+    </externalResourceDependency>
+  </externalResourceDependencies>
+  <resourceManagerConfiguration>
+    <externalResources>
+      <externalResource>
+        <name>LingpipieModelFile</name>
+        <description>Lingpipe NER Model</description>
+        <fileResourceSpecifier>
+          <fileUrl>models/lingpipe_model.out</fileUrl>
+        </fileResourceSpecifier>
+      </externalResource>
+    </externalResources>
+    <externalResourceBindings>
+			<externalResourceBinding>
+				<key>LingPipeNERModel</key>
+				<resourceName>LingpipieModelFile</resourceName>
+			</externalResourceBinding>
+		</externalResourceBindings>
+  </resourceManagerConfiguration>
+</analysisEngineDescription>
