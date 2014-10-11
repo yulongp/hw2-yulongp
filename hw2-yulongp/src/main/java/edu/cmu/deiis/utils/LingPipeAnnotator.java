@@ -25,6 +25,11 @@ public class LingPipeAnnotator extends JCasAnnotator_ImplBase {
 
   private NBestChunker chunker;
 
+  /*
+   * The initialize function for Lingpipe annotator
+   * para: UimaContenxt
+   * @see org.apache.uima.analysis_component.AnalysisComponent_ImplBase#initialize(org.apache.uima.UimaContext)
+   */
   @Override
   public void initialize(UimaContext aUimaContext) {
     try {
@@ -44,41 +49,14 @@ public class LingPipeAnnotator extends JCasAnnotator_ImplBase {
     }
   }
 
+  /*
+   * The process function for Lingpipe annotator
+   * para: JCas
+   * @see org.apache.uima.analysis_component.JCasAnnotator_ImplBase#process(org.apache.uima.jcas.JCas)
+   */
   @Override
   public void process(JCas aJCas) throws AnalysisEngineProcessException {
     // TODO Auto-generated method stub
-    /*String text = aJCas.getDocumentText();
-    // System.out.println("Lingpipe NER: " + text);
-    if (text == null) {
-      System.out.println("This is null string...");
-    }
-    String lines = text.replaceAll("\\s+", "");
-    char[] cs = text.toCharArray();
-    Iterator<Chunk> it = chunker.nBestChunks(cs, 0, cs.length, 6);
-    for (int n = 0; it.hasNext(); ++n) {
-      Chunk chunk = it.next();
-      double conf = Math.pow(2.0, chunk.score());
-      int start = chunk.start();
-      int end = chunk.end();
-      String phrase = text.substring(start, end);
-      String tmp = phrase.replaceAll("\\s+", "");
-      List<Integer> posList = new ArrayList<Integer>();
-      int idx = 0;
-      while ((idx = lines.indexOf(tmp, idx)) != -1) {
-        posList.add(idx);
-        idx += tmp.length();
-      }
-      for (Integer id : posList) {
-        start = id;
-        end = start + tmp.length() - 1;
-        GeneEntitybyLingpipe entity = new GeneEntitybyLingpipe(aJCas, start, end);
-        entity.setEntityText(phrase);
-        entity.setConfidence(conf);
-        entity.setCasProcessId(this.getClass().getName());
-        // entity.setCasProcessorId(this.getClass().getName());
-        entity.addToIndexes();
-      }
-    }*/
     String text = aJCas.getSofaDataString();
     // get top 1 chunking 
     ScoredObject<Chunking> chunkres = chunker.nBest(text.toCharArray(), 0, text.length(), 1).next();

@@ -15,6 +15,11 @@ import edu.cmu.deiis.sentence.GeneEntitybyPOS;
 
 public class GeneAnnotator extends JCasAnnotator_ImplBase {
 
+  /*
+   * The process function for aggregate annotator
+   * para: JCas
+   * @see org.apache.uima.analysis_component.JCasAnnotator_ImplBase#process(org.apache.uima.jcas.JCas)
+   */
   @Override
   public void process(JCas aJCas) throws AnalysisEngineProcessException {
     // TODO Auto-generated method stub

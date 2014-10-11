@@ -26,6 +26,10 @@ public class NERCollectionReader extends CollectionReader_ImplBase {
 
   private int total_size;
 
+  /*
+   * Initialize the input file
+   * @see org.apache.uima.collection.CollectionReader_ImplBase#initialize()
+   */
   public void initialize() {
     // open the input file
     try {
@@ -41,6 +45,11 @@ public class NERCollectionReader extends CollectionReader_ImplBase {
     }
   }
 
+  /*
+   * the function is used to get each CAS
+   * para: CAS
+   * @see org.apache.uima.collection.CollectionReader#getNext(org.apache.uima.cas.CAS)
+   */
   @Override
   public void getNext(CAS aCAS) throws IOException, CollectionException {
     // TODO Auto-generated method stub
@@ -65,6 +74,10 @@ public class NERCollectionReader extends CollectionReader_ImplBase {
     }
   }
 
+  /*
+   * This function is used to get next annotation
+   * @see org.apache.uima.collection.base_cpm.BaseCollectionReader#hasNext()
+   */
   @Override
   public boolean hasNext() throws IOException, CollectionException {
     // TODO Auto-generated method stub
@@ -78,12 +91,20 @@ public class NERCollectionReader extends CollectionReader_ImplBase {
     }
   }
 
+  /*
+   * This function is used to get the current process of the system
+   * @see org.apache.uima.collection.base_cpm.BaseCollectionReader#getProgress()
+   */
   @Override
   public Progress[] getProgress() {
     // TODO Auto-generated method stub
     return new Progress[] { new ProgressImpl(cur_size, total_size, Progress.ENTITIES) };
   }
 
+  /*
+   * This function is used to close the file stream
+   * @see org.apache.uima.collection.base_cpm.BaseCollectionReader#close()
+   */
   @Override
   public void close() throws IOException {
     // TODO Auto-generated method stub
