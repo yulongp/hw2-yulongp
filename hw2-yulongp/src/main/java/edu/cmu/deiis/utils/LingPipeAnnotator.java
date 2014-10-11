@@ -13,30 +13,32 @@ import org.apache.uima.jcas.JCas;
 import org.apache.uima.resource.ResourceAccessException;
 
 import com.aliasi.chunk.Chunk;
+import com.aliasi.chunk.Chunking;
 import com.aliasi.chunk.ConfidenceChunker;
+import com.aliasi.chunk.NBestChunker;
 import com.aliasi.util.AbstractExternalizable;
+import com.aliasi.util.ScoredObject;
 
 import edu.cmu.deiis.sentence.GeneEntitybyLingpipe;
 
 public class LingPipeAnnotator extends JCasAnnotator_ImplBase {
 
-  private ConfidenceChunker chunker;
+  private NBestChunker chunker;
 
   @Override
   public void initialize(UimaContext aUimaContext) {
     try {
-      chunker = (ConfidenceChunker) AbstractExternalizable.readObject(new File(aUimaContext
-      .getResourceFilePath("LingPipeNERModel")));
-      /*chunker = (ConfidenceChunker) AbstractExternalizable.readResourceObject(
-              LingPipeAnnotator.class,
-              (String) aUimaContext.getConfigParameterValue("LingPipeNERModel"));*/
+      chunker = (NBestChunker) AbstractExternalizable.readResourceObject((String) aUimaContext
+              .getConfigParameterValue("LingpipeModel"));
+      /*
+       * chunker = (ConfidenceChunker) AbstractExternalizable.readResourceObject(
+       * LingPipeAnnotator.class, (String)
+       * aUimaContext.getConfigParameterValue("LingPipeNERModel"));
+       */
     } catch (IOException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
     } catch (ClassNotFoundException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (ResourceAccessException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
@@ -45,7 +47,7 @@ public class LingPipeAnnotator extends JCasAnnotator_ImplBase {
   @Override
   public void process(JCas aJCas) throws AnalysisEngineProcessException {
     // TODO Auto-generated method stub
-    String text = aJCas.getDocumentText();
+    /*String text = aJCas.getDocumentText();
     // System.out.println("Lingpipe NER: " + text);
     if (text == null) {
       System.out.println("This is null string...");
@@ -76,6 +78,22 @@ public class LingPipeAnnotator extends JCasAnnotator_ImplBase {
         // entity.setCasProcessorId(this.getClass().getName());
         entity.addToIndexes();
       }
+    }*/
+    String text = aJCas.getSofaDataString();
+    // get top 1 chunking 
+    ScoredObject<Chunking> chunkres = chunker.nBest(text.toCharArray(), 0, text.length(), 1).next();
+    double conf = chunkres.score();
+    for(Chunk chunk : chunkres.getObject().chunkSet())
+    {
+      // adapt indices to non whitespace
+      int begin = text.substring(0, chunk.start()).replaceAll("\\s", "").length(); 
+      int end = -1+text.substring(0, chunk.end()).replaceAll("\\s", "").length(); 
+      // add mention to CAS
+      GeneEntitybyLingpipe mention = new GeneEntitybyLingpipe(aJCas, begin, end);
+      mention.setEntityText(text.substring(chunk.start(), chunk.end()));
+      mention.setCasProcessorId(this.getClass().getName());
+      mention.setConfidence(conf);
+      mention.addToIndexes();
     }
   }
 
