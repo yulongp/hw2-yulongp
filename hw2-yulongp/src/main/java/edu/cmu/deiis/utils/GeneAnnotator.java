@@ -26,7 +26,8 @@ public class GeneAnnotator extends JCasAnnotator_ImplBase {
     Iterator genelpIter = genelpIndex.iterator();
     while (genelpIter.hasNext()) {
       GeneEntitybyLingpipe ge = (GeneEntitybyLingpipe) genelpIter.next();
-      // System.out.println("Lingpipe: " + ge.getBegin() + " " + ge.getEnd() + " " + ge.getEntityText());
+      // System.out.println("Lingpipe: " + ge.getBegin() + " " + ge.getEnd() + " " +
+      // ge.getEntityText());
       lingpipeList.add(ge);
     }
 
@@ -42,20 +43,22 @@ public class GeneAnnotator extends JCasAnnotator_ImplBase {
     if (lingpipeList.size() != 0 && abnerList.size() != 0) {
       for (GeneEntitybyLingpipe ge1 : lingpipeList) {
         for (GeneEntitybyPOS ge2 : abnerList) {
-          // System.out.println("no overlapping: " + ge1.getEntityText() + " - " + ge2.getEntityText());
+          // System.out.println("no overlapping: " + ge1.getEntityText() + " - " +
+          // ge2.getEntityText());
           if (ge1.getEntityText().equals(ge2.getEntityText()) && ge1.getBegin() == ge2.getBegin()
                   && ge1.getEnd() == ge2.getEnd()) {
-            System.out.println(ge1.getEntityText() + " - " + ge2.getEntityText());
+            System.out.println(ge1.getEntityText() + ":" + ge1.getConfidence() + " - "
+                    + ge2.getEntityText() + ":" + ge2.getConfidence());
             double conf = ge1.getConfidence() * 0.5 + ge2.getConfidence() * 0.5;
-            if (conf > 0.65) {
-              GeneEntity ge = new GeneEntity(aJCas, ge1.getBegin(), ge1.getEnd());
-              ge.setBegin(ge1.getBegin());
-              ge.setEnd(ge1.getEnd());
-              ge.setCasProcessorId(this.getClass().getName());
-              ge.setConfidence(1);
-              ge.setEntityText(ge1.getEntityText());
-              ge.addToIndexes();
-            }
+            // if (conf > 0.65) {
+            GeneEntity ge = new GeneEntity(aJCas, ge1.getBegin(), ge1.getEnd());
+            ge.setBegin(ge1.getBegin());
+            ge.setEnd(ge1.getEnd());
+            ge.setCasProcessorId(this.getClass().getName());
+            ge.setConfidence(1);
+            ge.setEntityText(ge1.getEntityText());
+            ge.addToIndexes();
+            // }
           }
         }
       }
